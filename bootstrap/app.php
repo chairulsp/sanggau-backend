@@ -15,6 +15,11 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+// Custom public path for cPanel deployment where index.php is in the root
+$app->bind('path.public', function() {
+    return base_path();
+});
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
