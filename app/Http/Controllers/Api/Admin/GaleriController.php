@@ -17,7 +17,7 @@ class GaleriController extends Controller
     {
         $validated = $request->validate([
             'judul'    => 'required|string|max:255',
-            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'kategori' => 'nullable|string|max:100',
             'deskripsi'=> 'nullable|string',
             'aktif'    => 'nullable|boolean',
@@ -45,7 +45,7 @@ class GaleriController extends Controller
         $galeri = Galeri::findOrFail($id);
         $validated = $request->validate([
             'judul'    => 'sometimes|required|string|max:255',
-            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'kategori' => 'nullable|string|max:100',
             'deskripsi'=> 'nullable|string',
             'aktif'    => 'nullable|boolean',

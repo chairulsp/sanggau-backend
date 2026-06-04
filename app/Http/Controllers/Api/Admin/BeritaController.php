@@ -21,7 +21,7 @@ class BeritaController extends Controller
             'konten'    => 'nullable|string',
             'ringkasan' => 'nullable|string',
             'kategori'  => 'nullable|string|max:100',
-            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'penulis'   => 'nullable|string|max:255',
             'status'    => 'nullable|in:draft,published',
         ]);
@@ -59,7 +59,7 @@ class BeritaController extends Controller
             'konten'    => 'nullable|string',
             'ringkasan' => 'nullable|string',
             'kategori'  => 'nullable|string|max:100',
-            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'penulis'   => 'nullable|string|max:255',
             'status'    => 'nullable|in:draft,published',
         ]);
