@@ -34,7 +34,7 @@ class PublicController extends Controller
 
     public function detailBerita($slug)
     {
-        $berita = Berita::where('slug', $slug)->orWhere('id', $slug)->firstOrFail();
+        $berita = Berita::with(['user', 'editor'])->where('slug', $slug)->orWhere('id', $slug)->firstOrFail();
         $related = Berita::where('id', '!=', $berita->id)
             ->where('kategori', $berita->kategori)
             ->orderBy('published_at', 'desc')

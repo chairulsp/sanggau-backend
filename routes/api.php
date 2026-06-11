@@ -60,49 +60,41 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::put('profile',                  [ProfileController::class, 'update']);
     Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
 
-    // Konten (Berita bisa admin dan penulis)
-    Route::middleware('role:admin,penulis')->group(function () {
+    // Konten (Berita bisa admin, penulis, dan editor)
+    Route::middleware('role:admin,penulis,editor')->group(function () {
         Route::apiResource('berita',      \App\Http\Controllers\Api\Admin\BeritaController::class);
+        Route::post('berita/upload-image', [\App\Http\Controllers\Api\Admin\BeritaController::class, 'uploadImage']);
     });
 
-    // Konten & Pegawai (Hanya admin & superadmin)
+    // Konten & Manajemen (Admin & Superadmin - kecuali Pengguna)
     Route::middleware('role:admin')->group(function () {
+        // Konten Management
         Route::apiResource('pengumuman',  \App\Http\Controllers\Api\Admin\PengumumanController::class);
         Route::apiResource('galeri',      \App\Http\Controllers\Api\Admin\GaleriController::class);
         Route::apiResource('agenda',      \App\Http\Controllers\Api\Admin\AgendaController::class);
-
+        Route::apiResource('banner',      \App\Http\Controllers\Api\Admin\BannerController::class);
+        Route::apiResource('video',       \App\Http\Controllers\Api\Admin\VideoController::class);
+        Route::apiResource('laman',       \App\Http\Controllers\Api\Admin\LamanController::class);
+        
+        // Pegawai Management
         Route::get('/pegawai',         [PegawaiController::class, 'adminIndex']);
         Route::post('/pegawai',        [PegawaiController::class, 'store']);
         Route::get('/pegawai/{id}',    [PegawaiController::class, 'show']);
         Route::put('/pegawai/{id}',    [PegawaiController::class, 'update']);
         Route::delete('/pegawai/{id}', [PegawaiController::class, 'destroy']);
-    });
 
-    // Superadmin Only
-    Route::middleware('role:superadmin')->group(function () {
-        // Visitor stats
-        Route::get('visitor-stats', [VisitorController::class, 'stats']);
-
-        // Login history
-        Route::apiResource('login-history', \App\Http\Controllers\Api\Admin\LoginHistoryController::class)->only(['index', 'destroy']);
-
-        // Coverage 4G
-        Route::get('coverage4g',            [Coverage4gController::class, 'index']);
-        Route::put('coverage4g/{coverage4g}', [Coverage4gController::class, 'update']);
-        Route::post('coverage4g/bulk',      [Coverage4gController::class, 'bulk']);
+        // Layanan & Data Management
         Route::apiResource('layanan',   \App\Http\Controllers\Api\Admin\LayananController::class);
         Route::post('layanan/sync',     [\App\Http\Controllers\Api\Admin\LayananController::class, 'sync']);
         Route::patch('layanan/{layanan}/toggle-active', [\App\Http\Controllers\Api\Admin\LayananController::class, 'toggleActive']);
         Route::apiResource('statistik', \App\Http\Controllers\Api\Admin\StatistikController::class);
-        Route::apiResource('banner',    \App\Http\Controllers\Api\Admin\BannerController::class);
         Route::apiResource('skpd',      \App\Http\Controllers\Api\Admin\SkpdController::class);
         Route::apiResource('menu',      \App\Http\Controllers\Api\Admin\MenuController::class);
         Route::apiResource('struktur',  \App\Http\Controllers\Api\Admin\StrukturOrganisasiController::class);
         Route::apiResource('dokumen',   \App\Http\Controllers\Api\Admin\DokumenController::class);
         Route::apiResource('ppid',      \App\Http\Controllers\Api\Admin\PpidController::class);
-        Route::apiResource('video',     \App\Http\Controllers\Api\Admin\VideoController::class);
-        Route::apiResource('pengguna',  \App\Http\Controllers\Api\Admin\UserController::class);
-        Route::apiResource('laman',     \App\Http\Controllers\Api\Admin\LamanController::class);
+
+        // Settings Management
         Route::post('settings/bulk',    [\App\Http\Controllers\Api\Admin\SettingController::class, 'bulkUpdate']);
         Route::apiResource('settings',  \App\Http\Controllers\Api\Admin\SettingController::class);
 
@@ -111,11 +103,29 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
         Route::post('profil-diskominfo', [\App\Http\Controllers\Api\Admin\ProfilDiskominfoController::class, 'update']);
         Route::put('profil-diskominfo',  [\App\Http\Controllers\Api\Admin\ProfilDiskominfoController::class, 'update']);
 
-        // Pengaduan
+        // Pengaduan Management
         Route::get('pengaduan',             [\App\Http\Controllers\Api\Admin\PengaduanAdminController::class, 'index']);
         Route::get('pengaduan/{id}',         [\App\Http\Controllers\Api\Admin\PengaduanAdminController::class, 'show']);
         Route::post('pengaduan/{id}/balas',  [\App\Http\Controllers\Api\Admin\PengaduanAdminController::class, 'balas']);
         Route::put('pengaduan/{id}/status',  [\App\Http\Controllers\Api\Admin\PengaduanAdminController::class, 'updateStatus']);
         Route::delete('pengaduan/{id}',      [\App\Http\Controllers\Api\Admin\PengaduanAdminController::class, 'destroy']);
+
+        // Coverage 4G
+        Route::get('coverage4g',            [Coverage4gController::class, 'index']);
+        Route::put('coverage4g/{coverage4g}', [Coverage4gController::class, 'update']);
+        Route::post('coverage4g/bulk',      [Coverage4gController::class, 'bulk']);
+
+        // Visitor stats & Login history (read only)
+        Route::get('visitor-stats', [VisitorController::class, 'stats']);
+        Route::get('login-history', [\App\Http\Controllers\Api\Admin\LoginHistoryController::class, 'index']);
+    });
+
+    // Superadmin Only - Manajemen Pengguna & Delete Login History
+    Route::middleware('role:superadmin')->group(function () {
+        // User Management (ONLY Superadmin)
+        Route::apiResource('pengguna',  \App\Http\Controllers\Api\Admin\UserController::class);
+        
+        // Delete Login History (ONLY Superadmin)
+        Route::delete('login-history/{login_history}', [\App\Http\Controllers\Api\Admin\LoginHistoryController::class, 'destroy']);
     });
 });

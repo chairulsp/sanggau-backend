@@ -20,7 +20,7 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'role'     => 'required|in:superadmin,admin,penulis',
+            'role'     => 'required|in:superadmin,admin,editor,penulis',
         ]);
 
         $user = User::create([
@@ -44,7 +44,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $request->validate([
             'email' => 'email|unique:users,email,' . $id,
-            'role'  => 'in:superadmin,admin,penulis',
+            'role'  => 'in:superadmin,admin,editor,penulis',
         ]);
 
         $data = $request->only(['name', 'email', 'role', 'kecamatan']);
