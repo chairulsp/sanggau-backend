@@ -96,7 +96,8 @@ class BeritaController extends Controller
 
         // Enforce authorization checks
         if ($user->role !== 'superadmin') {
-            $isAuthor = $berita->user_id === $user->id;
+            $isAuthor = ($berita->user_id === $user->id) || 
+                        ($berita->user_id === null && !empty($berita->penulis) && $berita->penulis === $user->name);
             
             if ($user->role === 'penulis') {
                 if (!$isAuthor) {
@@ -190,7 +191,8 @@ class BeritaController extends Controller
 
         // Enforce authorization checks for delete
         if ($user->role !== 'superadmin') {
-            $isAuthor = $berita->user_id === $user->id;
+            $isAuthor = ($berita->user_id === $user->id) || 
+                        ($berita->user_id === null && !empty($berita->penulis) && $berita->penulis === $user->name);
             
             if ($user->role === 'penulis') {
                 if (!$isAuthor) {
