@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // WORKAROUND: Force register DatabaseServiceProvider
+        // This fixes "Target class [db] does not exist" error
+        // when DatabaseServiceProvider doesn't load automatically
+        if (!$this->app->bound('db')) {
+            $this->app->register(\Illuminate\Database\DatabaseServiceProvider::class);
+        }
     }
 
     /**

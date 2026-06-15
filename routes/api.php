@@ -54,7 +54,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // ===================== ADMIN ROUTES =====================
-Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+Route::middleware('auth:sanctum')->prefix('admin')->name('admin.')->group(function () {
 
     // Profile (semua role bisa akses)
     Route::put('profile',                  [ProfileController::class, 'update']);

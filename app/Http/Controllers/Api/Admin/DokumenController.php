@@ -19,10 +19,20 @@ class DokumenController extends Controller
             'judul'    => 'required|string|max:255',
             'kategori' => 'nullable|string|max:100',
             'file_url' => 'nullable|string',
+            'file'     => 'nullable|file|max:20480', // limit to 20MB
             'deskripsi'=> 'nullable|string',
             'tahun'    => 'nullable|string|max:10',
             'aktif'    => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/dokumen'), $filename);
+            $validated['file_url'] = '/uploads/dokumen/' . $filename;
+        }
+
+        unset($validated['file']);
         return response()->json(Dokumen::create($validated), 201);
     }
 
@@ -38,10 +48,20 @@ class DokumenController extends Controller
             'judul'    => 'sometimes|required|string|max:255',
             'kategori' => 'nullable|string|max:100',
             'file_url' => 'nullable|string',
+            'file'     => 'nullable|file|max:20480', // limit to 20MB
             'deskripsi'=> 'nullable|string',
             'tahun'    => 'nullable|string|max:10',
             'aktif'    => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/dokumen'), $filename);
+            $validated['file_url'] = '/uploads/dokumen/' . $filename;
+        }
+
+        unset($validated['file']);
         $item->update($validated);
         return response()->json($item);
     }

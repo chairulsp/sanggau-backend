@@ -15,9 +15,21 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-// Custom public path for cPanel deployment where index.php is in the root
+// CRITICAL FIX: Manually load .env file
+// This ensures env() function works in config files
+$envFile = $app->environmentPath() . '/' . $app->environmentFile();
+if (file_exists($envFile)) {
+    $dotenv = Dotenv\Dotenv::createImmutable($app->environmentPath(), $app->environmentFile());
+    $dotenv->load();
+}
+
+// Custom public path for cPanel deployment where public_html is a sibling to laravel
 $app->bind('path.public', function() {
-    return base_path();
+    $cpanelPath = dirname(base_path()) . '/public_html';
+    if (is_dir($cpanelPath)) {
+        return $cpanelPath;
+    }
+    return base_path('public');
 });
 
 /*

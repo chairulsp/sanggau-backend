@@ -22,6 +22,7 @@ return [
     'allowed_origins' => [
         'https://diskominfo.sanggau.go.id',
         'https://www.diskominfo.sanggau.go.id',
+        'https://api.diskominfo.sanggau.go.id',
 
         'http://localhost:3000',
         'http://localhost:8000',

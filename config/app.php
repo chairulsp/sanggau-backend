@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => 'Website Kabupaten Sanggau',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,9 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => 'https://api.diskominfo.sanggau.go.id',
 
-    'asset_url' => env('ASSET_URL', null),
+    'asset_url' => null,
 
     /*
     |--------------------------------------------------------------------------
