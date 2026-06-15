@@ -60,10 +60,11 @@ Route::middleware('auth:sanctum')->prefix('admin')->name('admin.')->group(functi
     Route::put('profile',                  [ProfileController::class, 'update']);
     Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
 
-    // Konten (Berita bisa admin, penulis, dan editor)
+    // Konten (Berita dan Dokumen bisa admin, penulis, dan editor)
     Route::middleware('role:admin,penulis,editor')->group(function () {
         Route::apiResource('berita',      \App\Http\Controllers\Api\Admin\BeritaController::class);
         Route::post('berita/upload-image', [\App\Http\Controllers\Api\Admin\BeritaController::class, 'uploadImage']);
+        Route::apiResource('dokumen',     \App\Http\Controllers\Api\Admin\DokumenController::class);
     });
 
     // Konten & Manajemen (Admin & Superadmin - kecuali Pengguna)
@@ -91,7 +92,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->name('admin.')->group(functi
         Route::apiResource('skpd',      \App\Http\Controllers\Api\Admin\SkpdController::class);
         Route::apiResource('menu',      \App\Http\Controllers\Api\Admin\MenuController::class);
         Route::apiResource('struktur',  \App\Http\Controllers\Api\Admin\StrukturOrganisasiController::class);
-        Route::apiResource('dokumen',   \App\Http\Controllers\Api\Admin\DokumenController::class);
         Route::apiResource('ppid',      \App\Http\Controllers\Api\Admin\PpidController::class);
 
         // Settings Management
