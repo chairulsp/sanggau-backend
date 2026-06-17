@@ -26,10 +26,13 @@ class PublicController extends Controller
 {
     public function berita(Request $request)
     {
-        $q = Berita::where('aktif', true)  // hanya berita yang sudah terbit
-                   ->orderBy('published_at', 'desc');
-        if ($request->kategori) $q->where('kategori', $request->kategori);
-        if ($request->search)   $q->where('judul', 'like', '%'.$request->search.'%');
+        $q = Berita::where('aktif', true)->orderBy('published_at', 'desc');
+        if ($request->kategori) {
+            $q->where('kategori', $request->kategori);
+        }
+        if ($request->search) {
+            $q->where('judul', 'like', '%' . $request->search . '%');
+        }
         return response()->json($q->paginate($request->get('per_page', 12)));
     }
 
@@ -37,7 +40,7 @@ class PublicController extends Controller
     {
         $berita = Berita::with(['user', 'editor'])
             ->where('aktif', true)
-            ->where(function($q) use ($slug) {
+            ->where(function ($q) use ($slug) {
                 $q->where('slug', $slug)->orWhere('id', $slug);
             })
             ->firstOrFail();
@@ -49,7 +52,8 @@ class PublicController extends Controller
             ->where('aktif', true)
             ->where('kategori', $berita->kategori)
             ->orderBy('published_at', 'desc')
-            ->limit(3)->get();
+            ->limit(3)
+            ->get();
 
         return response()->json(['berita' => $berita, 'terkait' => $related]);
     }
@@ -64,19 +68,19 @@ class PublicController extends Controller
         $layanans = Layanan::orderBy('urutan')->get();
         $mapped = $layanans->map(function ($l) {
             return [
-                'id' => $l->id,
-                'judul' => $l->nama,
-                'nama' => $l->nama,
+                'id'        => $l->id,
+                'judul'     => $l->nama,
+                'nama'      => $l->nama,
                 'deskripsi' => $l->deskripsi,
-                'icon' => $l->ikon,
-                'ikon' => $l->ikon,
-                'url' => $l->link,
-                'link' => $l->link,
-                'warna' => $l->warna,
-                'kategori' => $l->kategori,
-                'urutan' => $l->urutan,
-                'aktif' => $l->aktif,
-                'is_active' => (bool)$l->aktif,
+                'icon'      => $l->ikon,
+                'ikon'      => $l->ikon,
+                'url'       => $l->link,
+                'link'      => $l->link,
+                'warna'     => $l->warna,
+                'kategori'  => $l->kategori,
+                'urutan'    => $l->urutan,
+                'aktif'     => $l->aktif,
+                'is_active' => (bool) $l->aktif,
             ];
         });
         return response()->json(['data' => $mapped]);
@@ -94,7 +98,11 @@ class PublicController extends Controller
 
     public function pengumuman()
     {
-        return response()->json(Pengumuman::orderBy('penting', 'desc')->orderBy('tanggal_mulai', 'desc')->get());
+        return response()->json(
+            Pengumuman::orderBy('penting', 'desc')
+                ->orderBy('tanggal_mulai', 'desc')
+                ->get()
+        );
     }
 
     public function statistik()
@@ -107,8 +115,6 @@ class PublicController extends Controller
         return response()->json(Galeri::orderBy('created_at', 'desc')->get());
     }
 
-    // ==================== NEW DISKOMINFO ====================
-
     public function profilDiskominfo()
     {
         return response()->json(ProfilDiskominfo::first());
@@ -116,20 +122,26 @@ class PublicController extends Controller
 
     public function strukturOrganisasi()
     {
-        return response()->json(StrukturOrganisasi::where('aktif', true)->orderBy('urutan')->get());
+        return response()->json(
+            StrukturOrganisasi::where('aktif', true)->orderBy('urutan')->get()
+        );
     }
 
     public function dokumen(Request $request)
     {
         $q = Dokumen::where('aktif', true)->orderBy('created_at', 'desc');
-        if ($request->kategori) $q->where('kategori', $request->kategori);
+        if ($request->kategori) {
+            $q->where('kategori', $request->kategori);
+        }
         return response()->json($q->get());
     }
 
     public function ppid(Request $request)
     {
         $q = Ppid::where('aktif', true)->orderBy('urutan');
-        if ($request->kategori) $q->where('kategori', $request->kategori);
+        if ($request->kategori) {
+            $q->where('kategori', $request->kategori);
+        }
         return response()->json($q->get());
     }
 
@@ -148,8 +160,14 @@ class PublicController extends Controller
             'pesan'   => 'required|string',
         ]);
 
-        $pengaduan = Pengaduan::create($request->only(['nama', 'email', 'telepon', 'subjek', 'pesan']));
-        return response()->json(['message' => 'Pengaduan Anda berhasil dikirim. Terima kasih.', 'data' => $pengaduan], 201);
+        $pengaduan = Pengaduan::create(
+            $request->only(['nama', 'email', 'telepon', 'subjek', 'pesan'])
+        );
+
+        return response()->json([
+            'message' => 'Pengaduan Anda berhasil dikirim. Terima kasih.',
+            'data'    => $pengaduan,
+        ], 201);
     }
 
     public function semuaLaman()
@@ -173,32 +191,36 @@ class PublicController extends Controller
     {
         try {
             $response = Http::timeout(3)->get('https://turnbackhoax.id/feed/');
-            
+
             if (!$response->successful()) {
                 return response()->json($this->getMockHoaks());
             }
 
-            $xml = @simplexml_load_string($response->body(), 'SimpleXMLElement', LIBXML_NOCDATA);
+            $xml   = @simplexml_load_string($response->body(), 'SimpleXMLElement', LIBXML_NOCDATA);
             $items = [];
             $count = 0;
+
             if ($xml && isset($xml->channel->item)) {
                 foreach ($xml->channel->item as $item) {
                     if ($count >= 5) break;
-                    $title = (string)$item->title;
+                    $title  = (string) $item->title;
                     $status = 'HOAKS';
-                    if (stripos($title, 'disinformasi') !== false) $status = 'DISINFORMASI';
-                    elseif (stripos($title, 'benar') !== false || stripos($title, 'fakta') !== false) $status = 'FAKTA';
-                    
+                    if (stripos($title, 'disinformasi') !== false) {
+                        $status = 'DISINFORMASI';
+                    } elseif (stripos($title, 'benar') !== false || stripos($title, 'fakta') !== false) {
+                        $status = 'FAKTA';
+                    }
                     $items[] = [
-                        'id' => md5((string)$item->link),
-                        'judul' => $title,
-                        'status' => $status,
-                        'tanggal' => date('d M Y', strtotime((string)$item->pubDate)),
-                        'link' => (string)$item->link
+                        'id'      => md5((string) $item->link),
+                        'judul'   => $title,
+                        'status'  => $status,
+                        'tanggal' => date('d M Y', strtotime((string) $item->pubDate)),
+                        'link'    => (string) $item->link,
                     ];
                     $count++;
                 }
             }
+
             return response()->json($items ?: $this->getMockHoaks());
         } catch (\Exception $e) {
             return response()->json($this->getMockHoaks());
@@ -208,9 +230,9 @@ class PublicController extends Controller
     private function getMockHoaks()
     {
         return [
-            ['id' => '1', 'judul' => '[HOAKS] Bantuan Sosial Tunai Rp2 Juta dari Pemkab Sanggau', 'status' => 'HOAKS', 'tanggal' => '10 Mei 2026', 'link' => '#'],
-            ['id' => '2', 'judul' => '[DISINFORMASI] Pemadaman Listrik Total Selama Seminggu', 'status' => 'DISINFORMASI', 'tanggal' => '08 Mei 2026', 'link' => '#'],
-            ['id' => '3', 'judul' => '[HOAKS] Pendaftaran CPNS Jalur Khusus Tanpa Tes', 'status' => 'HOAKS', 'tanggal' => '05 Mei 2026', 'link' => '#']
+            ['id' => '1', 'judul' => '[HOAKS] Bantuan Sosial Tunai Rp2 Juta dari Pemkab Sanggau',   'status' => 'HOAKS',        'tanggal' => '10 Mei 2026', 'link' => '#'],
+            ['id' => '2', 'judul' => '[DISINFORMASI] Pemadaman Listrik Total Selama Seminggu',        'status' => 'DISINFORMASI', 'tanggal' => '08 Mei 2026', 'link' => '#'],
+            ['id' => '3', 'judul' => '[HOAKS] Pendaftaran CPNS Jalur Khusus Tanpa Tes',              'status' => 'HOAKS',        'tanggal' => '05 Mei 2026', 'link' => '#'],
         ];
     }
 }
