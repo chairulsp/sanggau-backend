@@ -12,13 +12,11 @@ class PegawaiController extends Controller
     private function resolvePhotoUrl(?string $foto): ?string
     {
         if (!$foto) return null;
-        // Sudah full URL
         if (str_starts_with($foto, 'http')) return $foto;
-        // Path /storage/... → pakai url() Laravel (ikut APP_URL di .env)
         return url($foto);
     }
 
-    // Helper: tambahkan foto_url ke collection
+    // Helper: tambahkan foto full URL ke collection
     private function withPhotoUrl($items)
     {
         return collect($items)->map(function ($item) {
@@ -27,6 +25,7 @@ class PegawaiController extends Controller
             return $arr;
         })->values();
     }
+
     // ============================================================
     // PUBLIC: GET /api/pegawai
     // ============================================================
@@ -45,6 +44,10 @@ class PegawaiController extends Controller
             'success' => true,
             'data' => $this->withPhotoUrl($query->get())
         ]);
+    }
+
+    // ============================================================
+    // PUBLIC: GET /api/profil-pimpinan
     // ============================================================
     public function profilPimpinan()
     {
@@ -62,15 +65,15 @@ class PegawaiController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'id' => $kepala->id,
-                'nama' => $kepala->nama_lengkap,
-                'jabatan' => $kepala->jabatan,
-                'foto' => $this->resolvePhotoUrl($kepala->foto),
-                'nip' => $kepala->nip,
-                'sambutan' => 'Selamat datang di website resmi Dinas Komunikasi dan Informatika Kabupaten Sanggau.',
-                'pendidikan' => $kepala->pendidikan_terakhir ? [$kepala->pendidikan_terakhir] : [],
-                'pangkat' => $kepala->pangkat_golongan,
-                'tahun_bergabung' => $kepala->tahun_bergabung,
+                'id'             => $kepala->id,
+                'nama'           => $kepala->nama_lengkap,
+                'jabatan'        => $kepala->jabatan,
+                'foto'           => $this->resolvePhotoUrl($kepala->foto),
+                'nip'            => $kepala->nip,
+                'sambutan'       => 'Selamat datang di website resmi Dinas Komunikasi dan Informatika Kabupaten Sanggau.',
+                'pendidikan'     => $kepala->pendidikan_terakhir ? [$kepala->pendidikan_terakhir] : [],
+                'pangkat'        => $kepala->pangkat_golongan,
+                'tahun_bergabung'=> $kepala->tahun_bergabung,
             ]
         ]);
     }
@@ -94,25 +97,25 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_lengkap' => 'required|string|max:255',
-            'nip' => 'required|string|max:50|unique:pegawai,nip',
-            'jabatan' => 'required|string|max:100',
-            'tipe_jabatan' => 'required|in:pimpinan,fungsional,pelaksana',
-            'bidang' => 'nullable|string|max:100',
-            'status_pegawai' => 'required|in:PNS,PPPK,Honorer',
-            'pangkat_golongan' => 'nullable|string|max:50',
-            'tahun_bergabung' => 'nullable|integer',
-            'pendidikan_terakhir' => 'nullable|string|max:100',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'urutan' => 'nullable|integer',
-            'aktif' => 'nullable',
+            'nama_lengkap'       => 'required|string|max:255',
+            'nip'                => 'required|string|max:50|unique:pegawai,nip',
+            'jabatan'            => 'required|string|max:100',
+            'tipe_jabatan'       => 'required|in:pimpinan,fungsional,pelaksana',
+            'bidang'             => 'nullable|string|max:100',
+            'status_pegawai'     => 'required|in:PNS,PPPK,Honorer',
+            'pangkat_golongan'   => 'nullable|string|max:50',
+            'tahun_bergabung'    => 'nullable|integer',
+            'pendidikan_terakhir'=> 'nullable|string|max:100',
+            'foto'               => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'urutan'             => 'nullable|integer',
+            'aktif'              => 'nullable',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validasi gagal',
-                'errors' => $validator->errors()
+                'errors'  => $validator->errors()
             ], 422);
         }
 
@@ -125,8 +128,8 @@ class PegawaiController extends Controller
 
         // Upload foto langsung ke public/uploads/pegawai/
         if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
+            $file      = $request->file('foto');
+            $filename  = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
             $uploadDir = public_path('uploads/pegawai');
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
@@ -135,14 +138,14 @@ class PegawaiController extends Controller
             $data['foto'] = '/uploads/pegawai/' . $filename;
         }
 
-        $pegawai = Pegawai::create($data);
-        $arr = $pegawai->toArray();
-        $arr['foto'] = $this->resolvePhotoUrl($pegawai->foto);
+        $pegawai      = Pegawai::create($data);
+        $arr          = $pegawai->toArray();
+        $arr['foto']  = $this->resolvePhotoUrl($pegawai->foto);
 
         return response()->json([
             'success' => true,
             'message' => 'Pegawai berhasil ditambahkan',
-            'data' => $arr
+            'data'    => $arr
         ], 201);
     }
 
@@ -160,12 +163,12 @@ class PegawaiController extends Controller
             ], 404);
         }
 
-        $arr = $pegawai->toArray();
+        $arr         = $pegawai->toArray();
         $arr['foto'] = $this->resolvePhotoUrl($pegawai->foto);
 
         return response()->json([
             'success' => true,
-            'data' => $arr
+            'data'    => $arr
         ]);
     }
 
@@ -184,25 +187,25 @@ class PegawaiController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nama_lengkap' => 'required|string|max:255',
-            'nip' => 'required|string|max:50|unique:pegawai,nip,' . $id,
-            'jabatan' => 'required|string|max:100',
-            'tipe_jabatan' => 'required|in:pimpinan,fungsional,pelaksana',
-            'bidang' => 'nullable|string|max:100',
-            'status_pegawai' => 'required|in:PNS,PPPK,Honorer',
-            'pangkat_golongan' => 'nullable|string|max:50',
-            'tahun_bergabung' => 'nullable|integer',
-            'pendidikan_terakhir' => 'nullable|string|max:100',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'urutan' => 'nullable|integer',
-            'aktif' => 'nullable',
+            'nama_lengkap'       => 'required|string|max:255',
+            'nip'                => 'required|string|max:50|unique:pegawai,nip,' . $id,
+            'jabatan'            => 'required|string|max:100',
+            'tipe_jabatan'       => 'required|in:pimpinan,fungsional,pelaksana',
+            'bidang'             => 'nullable|string|max:100',
+            'status_pegawai'     => 'required|in:PNS,PPPK,Honorer',
+            'pangkat_golongan'   => 'nullable|string|max:50',
+            'tahun_bergabung'    => 'nullable|integer',
+            'pendidikan_terakhir'=> 'nullable|string|max:100',
+            'foto'               => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'urutan'             => 'nullable|integer',
+            'aktif'              => 'nullable',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validasi gagal',
-                'errors' => $validator->errors()
+                'errors'  => $validator->errors()
             ], 422);
         }
 
@@ -215,7 +218,7 @@ class PegawaiController extends Controller
 
         // Upload foto baru langsung ke public/uploads/pegawai/
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada di uploads
+            // Hapus foto lama jika di uploads
             if ($pegawai->foto && str_contains($pegawai->foto, '/uploads/')) {
                 $oldPath = public_path(ltrim($pegawai->foto, '/'));
                 if (file_exists($oldPath)) {
@@ -223,8 +226,8 @@ class PegawaiController extends Controller
                 }
             }
 
-            $file = $request->file('foto');
-            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
+            $file      = $request->file('foto');
+            $filename  = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
             $uploadDir = public_path('uploads/pegawai');
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
@@ -234,14 +237,14 @@ class PegawaiController extends Controller
         }
 
         $pegawai->update($data);
-        $updated = $pegawai->refresh();
-        $arr = $updated->toArray();
+        $updated     = $pegawai->refresh();
+        $arr         = $updated->toArray();
         $arr['foto'] = $this->resolvePhotoUrl($updated->foto);
 
         return response()->json([
             'success' => true,
             'message' => 'Pegawai berhasil diperbarui',
-            'data' => $arr
+            'data'    => $arr
         ]);
     }
 
