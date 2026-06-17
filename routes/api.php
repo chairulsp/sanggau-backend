@@ -60,11 +60,10 @@ Route::middleware('auth:sanctum')->prefix('admin')->name('admin.')->group(functi
     Route::put('profile',                  [ProfileController::class, 'update']);
     Route::post('profile/change-password', [ProfileController::class, 'changePassword']);
 
-    // Konten (Berita dan Dokumen bisa admin, penulis, dan editor)
+    // Konten (Berita bisa admin, penulis, dan editor)
     Route::middleware('role:admin,penulis,editor')->group(function () {
         Route::apiResource('berita',      \App\Http\Controllers\Api\Admin\BeritaController::class);
         Route::post('berita/upload-image', [\App\Http\Controllers\Api\Admin\BeritaController::class, 'uploadImage']);
-        Route::apiResource('dokumen',     \App\Http\Controllers\Api\Admin\DokumenController::class);
     });
 
     // Konten & Manajemen (Admin & Superadmin - kecuali Pengguna)
@@ -76,6 +75,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->name('admin.')->group(functi
         Route::apiResource('banner',      \App\Http\Controllers\Api\Admin\BannerController::class);
         Route::apiResource('video',       \App\Http\Controllers\Api\Admin\VideoController::class);
         Route::apiResource('laman',       \App\Http\Controllers\Api\Admin\LamanController::class);
+        Route::apiResource('dokumen',     \App\Http\Controllers\Api\Admin\DokumenController::class);
         
         // Pegawai Management
         Route::get('/pegawai',         [PegawaiController::class, 'adminIndex']);
