@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PegawaiController extends Controller
@@ -124,19 +123,16 @@ class PegawaiController extends Controller
             $data['bidang'] = null;
         }
 
-        // Upload foto
+        // Upload foto langsung ke public/uploads/pegawai/
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-
-            // Coba storage/public dulu, fallback ke public/uploads/pegawai
-            try {
-                $path = $file->storeAs('pegawai', $filename, 'public');
-                $data['foto'] = '/storage/' . $path;
-            } catch (\Exception $e) {
-                $file->move(public_path('uploads/pegawai'), $filename);
-                $data['foto'] = '/uploads/pegawai/' . $filename;
+            $uploadDir = public_path('uploads/pegawai');
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
             }
+            $file->move($uploadDir, $filename);
+            $data['foto'] = '/uploads/pegawai/' . $filename;
         }
 
         $pegawai = Pegawai::create($data);
@@ -217,34 +213,24 @@ class PegawaiController extends Controller
             $data['bidang'] = null;
         }
 
-        // Upload foto baru
+        // Upload foto baru langsung ke public/uploads/pegawai/
         if ($request->hasFile('foto')) {
-            // Hapus foto lama
-            if ($pegawai->foto && !str_starts_with($pegawai->foto, 'http')) {
-                if (str_contains($pegawai->foto, '/storage/')) {
-                    $oldPath = str_replace('/storage/', '', $pegawai->foto);
-                    if (Storage::disk('public')->exists($oldPath)) {
-                        Storage::disk('public')->delete($oldPath);
-                    }
-                } elseif (str_contains($pegawai->foto, '/uploads/')) {
-                    $oldPublicPath = public_path(ltrim($pegawai->foto, '/'));
-                    if (file_exists($oldPublicPath)) {
-                        unlink($oldPublicPath);
-                    }
+            // Hapus foto lama jika ada di uploads
+            if ($pegawai->foto && str_contains($pegawai->foto, '/uploads/')) {
+                $oldPath = public_path(ltrim($pegawai->foto, '/'));
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
                 }
             }
 
             $file = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-
-            // Coba storage/public dulu, fallback ke public/uploads/pegawai
-            try {
-                $path = $file->storeAs('pegawai', $filename, 'public');
-                $data['foto'] = '/storage/' . $path;
-            } catch (\Exception $e) {
-                $file->move(public_path('uploads/pegawai'), $filename);
-                $data['foto'] = '/uploads/pegawai/' . $filename;
+            $uploadDir = public_path('uploads/pegawai');
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
             }
+            $file->move($uploadDir, $filename);
+            $data['foto'] = '/uploads/pegawai/' . $filename;
         }
 
         $pegawai->update($data);
@@ -273,11 +259,11 @@ class PegawaiController extends Controller
             ], 404);
         }
 
-        // Hapus foto
-        if ($pegawai->foto) {
-            $path = str_replace('/storage/', '', $pegawai->foto);
-            if (Storage::disk('public')->exists($path)) {
-                Storage::disk('public')->delete($path);
+        // Hapus foto dari public/uploads/pegawai/
+        if ($pegawai->foto && !str_starts_with($pegawai->foto, 'http')) {
+            $fotoPath = public_path(ltrim($pegawai->foto, '/'));
+            if (file_exists($fotoPath)) {
+                unlink($fotoPath);
             }
         }
 
