@@ -9,6 +9,25 @@ use Illuminate\Support\Facades\Validator;
 
 class PegawaiController extends Controller
 {
+    // Helper: konversi path foto ke full URL
+    private function resolvePhotoUrl(?string $foto): ?string
+    {
+        if (!$foto) return null;
+        // Sudah full URL
+        if (str_starts_with($foto, 'http')) return $foto;
+        // Path /storage/... → pakai url() Laravel (ikut APP_URL di .env)
+        return url($foto);
+    }
+
+    // Helper: tambahkan foto_url ke collection
+    private function withPhotoUrl($items)
+    {
+        return collect($items)->map(function ($item) {
+            $arr = is_array($item) ? $item : $item->toArray();
+            $arr['foto'] = $this->resolvePhotoUrl($arr['foto'] ?? null);
+            return $arr;
+        })->values();
+    }
     // ============================================================
     // PUBLIC: GET /api/pegawai
     // ============================================================
@@ -25,12 +44,8 @@ class PegawaiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $query->get()
+            'data' => $this->withPhotoUrl($query->get())
         ]);
-    }
-
-    // ============================================================
-    // PUBLIC: GET /api/profil-pimpinan
     // ============================================================
     public function profilPimpinan()
     {
@@ -51,7 +66,7 @@ class PegawaiController extends Controller
                 'id' => $kepala->id,
                 'nama' => $kepala->nama_lengkap,
                 'jabatan' => $kepala->jabatan,
-                'foto' => $kepala->foto,
+                'foto' => $this->resolvePhotoUrl($kepala->foto),
                 'nip' => $kepala->nip,
                 'sambutan' => 'Selamat datang di website resmi Dinas Komunikasi dan Informatika Kabupaten Sanggau.',
                 'pendidikan' => $kepala->pendidikan_terakhir ? [$kepala->pendidikan_terakhir] : [],
@@ -70,7 +85,7 @@ class PegawaiController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $pegawai
+            'data' => $this->withPhotoUrl($pegawai)
         ]);
     }
 
@@ -113,16 +128,25 @@ class PegawaiController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $path = $file->storeAs('pegawai', $filename, 'public');
-            $data['foto'] = '/storage/' . $path;
+
+            // Coba storage/public dulu, fallback ke public/uploads/pegawai
+            try {
+                $path = $file->storeAs('pegawai', $filename, 'public');
+                $data['foto'] = '/storage/' . $path;
+            } catch (\Exception $e) {
+                $file->move(public_path('uploads/pegawai'), $filename);
+                $data['foto'] = '/uploads/pegawai/' . $filename;
+            }
         }
 
         $pegawai = Pegawai::create($data);
+        $arr = $pegawai->toArray();
+        $arr['foto'] = $this->resolvePhotoUrl($pegawai->foto);
 
         return response()->json([
             'success' => true,
             'message' => 'Pegawai berhasil ditambahkan',
-            'data' => $pegawai
+            'data' => $arr
         ], 201);
     }
 
@@ -140,9 +164,12 @@ class PegawaiController extends Controller
             ], 404);
         }
 
+        $arr = $pegawai->toArray();
+        $arr['foto'] = $this->resolvePhotoUrl($pegawai->foto);
+
         return response()->json([
             'success' => true,
-            'data' => $pegawai
+            'data' => $arr
         ]);
     }
 
@@ -193,25 +220,42 @@ class PegawaiController extends Controller
         // Upload foto baru
         if ($request->hasFile('foto')) {
             // Hapus foto lama
-            if ($pegawai->foto) {
-                $oldPath = str_replace('/storage/', '', $pegawai->foto);
-                if (Storage::disk('public')->exists($oldPath)) {
-                    Storage::disk('public')->delete($oldPath);
+            if ($pegawai->foto && !str_starts_with($pegawai->foto, 'http')) {
+                if (str_contains($pegawai->foto, '/storage/')) {
+                    $oldPath = str_replace('/storage/', '', $pegawai->foto);
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                } elseif (str_contains($pegawai->foto, '/uploads/')) {
+                    $oldPublicPath = public_path(ltrim($pegawai->foto, '/'));
+                    if (file_exists($oldPublicPath)) {
+                        unlink($oldPublicPath);
+                    }
                 }
             }
 
             $file = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $path = $file->storeAs('pegawai', $filename, 'public');
-            $data['foto'] = '/storage/' . $path;
+
+            // Coba storage/public dulu, fallback ke public/uploads/pegawai
+            try {
+                $path = $file->storeAs('pegawai', $filename, 'public');
+                $data['foto'] = '/storage/' . $path;
+            } catch (\Exception $e) {
+                $file->move(public_path('uploads/pegawai'), $filename);
+                $data['foto'] = '/uploads/pegawai/' . $filename;
+            }
         }
 
         $pegawai->update($data);
+        $updated = $pegawai->refresh();
+        $arr = $updated->toArray();
+        $arr['foto'] = $this->resolvePhotoUrl($updated->foto);
 
         return response()->json([
             'success' => true,
             'message' => 'Pegawai berhasil diperbarui',
-            'data' => $pegawai->refresh()
+            'data' => $arr
         ]);
     }
 
