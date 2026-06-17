@@ -126,11 +126,11 @@ class PegawaiController extends Controller
             $data['bidang'] = null;
         }
 
-        // Upload foto langsung ke public/uploads/pegawai/
+        // Upload foto langsung ke public_html/uploads/pegawai/
         if ($request->hasFile('foto')) {
             $file      = $request->file('foto');
             $filename  = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $uploadDir = public_path('uploads/pegawai');
+            $uploadDir = '/home/diskominfo/public_html/uploads/pegawai';
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
@@ -216,11 +216,11 @@ class PegawaiController extends Controller
             $data['bidang'] = null;
         }
 
-        // Upload foto baru langsung ke public/uploads/pegawai/
+        // Upload foto baru langsung ke public_html/uploads/pegawai/
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika di uploads
             if ($pegawai->foto && str_contains($pegawai->foto, '/uploads/')) {
-                $oldPath = public_path(ltrim($pegawai->foto, '/'));
+                $oldPath = '/home/diskominfo/public_html' . $pegawai->foto;
                 if (file_exists($oldPath)) {
                     unlink($oldPath);
                 }
@@ -228,7 +228,7 @@ class PegawaiController extends Controller
 
             $file      = $request->file('foto');
             $filename  = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $uploadDir = public_path('uploads/pegawai');
+            $uploadDir = '/home/diskominfo/public_html/uploads/pegawai';
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
@@ -262,9 +262,9 @@ class PegawaiController extends Controller
             ], 404);
         }
 
-        // Hapus foto dari public/uploads/pegawai/
+        // Hapus foto dari public_html/uploads/pegawai/
         if ($pegawai->foto && !str_starts_with($pegawai->foto, 'http')) {
-            $fotoPath = public_path(ltrim($pegawai->foto, '/'));
+            $fotoPath = '/home/diskominfo/public_html' . $pegawai->foto;
             if (file_exists($fotoPath)) {
                 unlink($fotoPath);
             }
