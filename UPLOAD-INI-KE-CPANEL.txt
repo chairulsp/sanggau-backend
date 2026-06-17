@@ -1,0 +1,136 @@
+═══════════════════════════════════════════════════════════════════════════════
+  FILE YANG HARUS DI-UPLOAD KE CPANEL (3 FILES)
+═══════════════════════════════════════════════════════════════════════════════
+
+📁 LOKASI FILE DI LOCAL:
+   c:\xampp\htdocs\sanggau-backend\
+
+═══════════════════════════════════════════════════════════════════════════════
+FILE 1: app/Http/Kernel.php
+═══════════════════════════════════════════════════════════════════════════════
+
+Upload ke: app/Http/Kernel.php (overwrite yang lama)
+
+Apa yang diperbaiki:
+✅ DecodeBase64Input middleware di-disable
+✅ Fix error 500 server error
+
+═══════════════════════════════════════════════════════════════════════════════
+FILE 2: .env
+═══════════════════════════════════════════════════════════════════════════════
+
+Upload ke: .env (overwrite yang lama)
+
+Apa yang diperbaiki:
+✅ DB_HOST = localhost (dulu: 127.0.0.1)
+✅ DB_DATABASE = diskominfo_sanggaudb
+✅ DB_USERNAME = diskominfo_sanggau
+✅ DB_PASSWORD = diskominfo_sanggau26
+✅ APP_URL = https://api.diskominfo.sanggau.go.id
+
+═══════════════════════════════════════════════════════════════════════════════
+FILE 3: clear-cache.php (TEMPORARY)
+═══════════════════════════════════════════════════════════════════════════════
+
+Upload ke: clear-cache.php (root folder)
+
+Untuk apa:
+- Clear cache Laravel via browser
+- Tidak perlu SSH/Terminal
+
+Cara pakai:
+1. Akses: https://api.diskominfo.sanggau.go.id/clear-cache.php
+2. Klik "Clear All Cache"
+3. Klik "Rebuild Cache"
+4. HAPUS file ini setelah selesai!
+
+⚠️  WAJIB DIHAPUS SETELAH DIGUNAKAN!
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP-BY-STEP DEPLOYMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+□ 1. Login ke cPanel
+□ 2. Buka File Manager
+□ 3. Masuk ke folder aplikasi (biasanya public_html atau htdocs)
+□ 4. Upload app/Http/Kernel.php (overwrite)
+□ 5. Upload .env (overwrite)
+□ 6. Upload clear-cache.php (ke root folder)
+□ 7. Akses: https://api.diskominfo.sanggau.go.id/clear-cache.php
+□ 8. Klik "Clear All Cache" → tunggu ✅
+□ 9. Klik "Rebuild Cache" → tunggu ✅
+□ 10. Hapus file clear-cache.php via File Manager
+□ 11. Test website: https://diskominfo.sanggau.go.id
+□ 12. Test login admin
+□ 13. Test buat berita (harus berhasil tanpa error 403!)
+
+═══════════════════════════════════════════════════════════════════════════════
+KREDENSIAL DATABASE (SUDAH BENAR)
+═══════════════════════════════════════════════════════════════════════════════
+
+DB_HOST=localhost
+DB_DATABASE=diskominfo_sanggaudb
+DB_USERNAME=diskominfo_sanggau
+DB_PASSWORD=diskominfo_sanggau26
+
+✅ Kredensial ini sudah benar dan sesuai dengan cPanel!
+
+═══════════════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING (JIKA MASIH ERROR)
+═══════════════════════════════════════════════════════════════════════════════
+
+Error 500:
+→ Upload server-troubleshooting.php
+→ Akses: https://api.diskominfo.sanggau.go.id/server-troubleshooting.php
+→ Check semua section
+→ Hapus file setelah selesai
+
+Error Database:
+→ Verify kredensial di .env
+→ Check di cPanel → MySQL Databases
+→ Pastikan user sudah di-assign ke database
+
+Error 403 saat save:
+→ Pastikan Kernel.php yang baru sudah ter-upload
+→ Clear cache lagi
+
+Login Gagal:
+→ Clear browser cache & cookies
+→ Coba incognito mode
+
+═══════════════════════════════════════════════════════════════════════════════
+DOKUMENTASI LENGKAP
+═══════════════════════════════════════════════════════════════════════════════
+
+Quick Guide:      DEPLOY-SEKARANG.md
+Detailed Guide:   DEPLOYMENT-CPANEL-FIX.md
+Troubleshooting:  TROUBLESHOOTING-GUIDE.md
+Checklist:        DEPLOYMENT-CHECKLIST.md
+
+═══════════════════════════════════════════════════════════════════════════════
+EXPECTED RESULT
+═══════════════════════════════════════════════════════════════════════════════
+
+Setelah deployment selesai:
+
+✅ Website accessible (tidak ada error 500)
+✅ Login admin berfungsi
+✅ Database terkoneksi
+✅ Buat berita tidak error 403
+✅ Upload file berfungsi
+✅ Semua fitur CRUD normal
+
+═══════════════════════════════════════════════════════════════════════════════
+ESTIMATED TIME: 5 MENIT
+═══════════════════════════════════════════════════════════════════════════════
+
+Upload files:     2 menit
+Clear cache:      1 menit
+Test website:     2 menit
+TOTAL:            5 menit
+
+═══════════════════════════════════════════════════════════════════════════════
+
+READY TO DEPLOY! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════

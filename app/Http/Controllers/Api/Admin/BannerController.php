@@ -27,9 +27,31 @@ class BannerController extends Controller
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/banner'), $filename);
-            $validated['gambar'] = '/uploads/banner/' . $filename;
+            
+            // Validasi file valid
+            if ($file->isValid()) {
+                // Pastikan folder exists
+                $uploadPath = public_path('uploads/banner');
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0775, true);
+                }
+                
+                $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+                
+                // Try move file
+                try {
+                    $file->move($uploadPath, $filename);
+                    $validated['gambar'] = '/uploads/banner/' . $filename;
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => 'Gagal upload gambar: ' . $e->getMessage()
+                    ], 500);
+                }
+            } else {
+                return response()->json([
+                    'message' => 'File gambar tidak valid: ' . $file->getErrorMessage()
+                ], 422);
+            }
         }
 
         // Konversi aktif ke boolean
@@ -65,9 +87,27 @@ class BannerController extends Controller
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-            $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/banner'), $filename);
-            $validated['gambar'] = '/uploads/banner/' . $filename;
+            
+            // Validasi file valid
+            if ($file->isValid()) {
+                // Pastikan folder exists
+                $uploadPath = public_path('uploads/banner');
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0775, true);
+                }
+                
+                $filename = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+                
+                // Try move file
+                try {
+                    $file->move($uploadPath, $filename);
+                    $validated['gambar'] = '/uploads/banner/' . $filename;
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => 'Gagal upload gambar: ' . $e->getMessage()
+                    ], 500);
+                }
+            }
         } else {
             unset($validated['gambar']);
         }

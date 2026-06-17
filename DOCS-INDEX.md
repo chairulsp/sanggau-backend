@@ -1,423 +1,216 @@
-# 📚 Dokumentasi Index - Full Laravel Diskominfo Sanggau
+# 📚 Dokumentasi Index - Sanggau Website
 
-Panduan lengkap untuk menggunakan aplikasi web Full Laravel dengan Blade Templates.
+## Panduan Membaca Dokumentasi
 
----
-
-## 🚀 Quick Access
-
-### 🎯 **Baru Mulai? Baca Ini Dulu:**
-1. ✅ **[SETUP-COMPLETE.md](SETUP-COMPLETE.md)** ← **MULAI DARI SINI!**
-   - Status setup terkini
-   - Server sudah running
-   - Testing checklist
-   - Commands reference
-
-2. ⚡ **[QUICK-START.md](QUICK-START.md)**
-   - Setup 5 langkah
-   - Testing halaman
-   - Troubleshooting cepat
-   - Template halaman baru
+Baca dokumen sesuai kebutuhan Anda:
 
 ---
 
-## 📖 Dokumentasi Lengkap
+## 🚀 UNTUK DEPLOY
 
-### 🏗️ **Untuk Developer:**
+### 1. Pertama Kali Deploy
+📖 Baca urutan ini:
 
-#### **[KONVERSI-FULL-LARAVEL.md](KONVERSI-FULL-LARAVEL.md)** (4500+ kata)
-**Panduan implementasi lengkap** berisi:
-- ✅ Penjelasan struktur file
-- ✅ Halaman yang sudah & belum dibuat
-- ✅ Design system (colors, typography, spacing)
-- ✅ Responsive breakpoints
-- ✅ Performance optimization
-- ✅ Deployment checklist
-- ✅ Security best practices
-- ✅ Troubleshooting guide
+1. **[PRE-DEPLOY-CHECKLIST.md](./PRE-DEPLOY-CHECKLIST.md)** ← Checklist sebelum deploy
+2. **[FINAL-SUMMARY.md](./FINAL-SUMMARY.md)** ← Overview apa yang diperbaiki
+3. **[DEPLOY-READY.md](./DEPLOY-READY.md)** ← Step-by-step lengkap deploy backend & frontend
+4. **[QUICK-REFERENCE.md](./QUICK-REFERENCE.md)** ← Command quick reference
 
-**Kapan baca:**
-- Ingin memahami arsitektur lengkap
-- Butuh panduan membuat halaman baru
-- Persiapan deployment production
-- Troubleshooting masalah
+### 2. Deploy Backend Saja (Upload Manual)
+📖 Baca:
+- **[UPLOAD-MANUAL-GUIDE.md](./UPLOAD-MANUAL-GUIDE.md)** ⭐ Step-by-step upload via File Manager
+- **[UPLOAD-QUICK-CHECKLIST.txt](./UPLOAD-QUICK-CHECKLIST.txt)** ⭐ Quick reference
+- **[DEPLOY-READY.md](./DEPLOY-READY.md)** - Section "BACKEND - Upload ke cPanel"
+- **[DEPLOYMENT-GUIDE.md](./DEPLOYMENT-GUIDE.md)** - Detail troubleshooting
 
----
-
-#### **[README-LARAVEL-BLADE.md](README-LARAVEL-BLADE.md)**
-**Dokumentasi project utama** berisi:
-- ✅ Overview & fitur lengkap
-- ✅ Tech stack
-- ✅ Installation guide step-by-step
-- ✅ File structure detail
-- ✅ Database models
-- ✅ Configuration options
-- ✅ Deployment guide (Apache/Nginx)
-- ✅ Monitoring & logging
-
-**Kapan baca:**
-- Setup project dari awal
-- Deploy ke production server
-- Configure web server
-- Setup monitoring
+### 3. Deploy Frontend Saja
+📖 Baca:
+- **[sanggau-frontend/GIT-COMMIT-GUIDE.md](./sanggau-frontend/GIT-COMMIT-GUIDE.md)** - Git commands
+- **[sanggau-frontend/DEPLOYMENT-UPDATE.md](./sanggau-frontend/DEPLOYMENT-UPDATE.md)** - Frontend details
 
 ---
 
-#### **[SUMMARY.md](SUMMARY.md)**
-**Rangkuman hasil kerja** berisi:
-- ✅ Apa yang sudah dibuat (detail)
-- ✅ File structure lengkap
-- ✅ Statistics (8 files, 2600+ lines)
-- ✅ Features implemented (80+)
-- ✅ Status halaman (completed vs pending)
-- ✅ Technical highlights
-- ✅ Next actions
+## 🔍 UNTUK TROUBLESHOOTING
 
-**Kapan baca:**
-- Mau overview cepat
-- Cek status completion
-- Lihat statistik project
+### Gambar Tidak Muncul
+📖 Baca:
+1. **[DEPLOY-READY.md](./DEPLOY-READY.md)** - Section "Troubleshooting"
+2. **[QUICK-REFERENCE.md](./QUICK-REFERENCE.md)** - Section "TROUBLESHOOTING"
 
----
+### Admin 403 Forbidden
+📖 Baca:
+- **[DEPLOY-READY.md](./DEPLOY-READY.md)** - Section "Admin 403 Forbidden"
 
-## 🎨 Panduan Penggunaan
-
-### 1️⃣ **Pertama Kali Setup**
-
-```
-Baca urutan ini:
-1. SETUP-COMPLETE.md  (status & testing)
-2. QUICK-START.md     (langkah cepat)
-3. README-LARAVEL-BLADE.md (jika butuh detail)
-```
-
-**Action:**
-```bash
-# 1. Check server running
-http://127.0.0.1:8000
-
-# 2. Test 4 halaman
-- Homepage
-- Berita
-- Detail Berita
-- Galeri
-
-# 3. Test responsive (F12 → device toolbar)
-```
+### CORS Error
+📖 Baca:
+- **[DEPLOY-READY.md](./DEPLOY-READY.md)** - Section "CORS Error"
+- **[DEPLOYMENT-GUIDE.md](./DEPLOYMENT-GUIDE.md)** - Section "CORS Errors"
 
 ---
 
-### 2️⃣ **Membuat Halaman Baru**
+## 📖 UNTUK DEVELOPMENT
 
-```
-Baca: QUICK-START.md → Section "Membuat Halaman Baru"
-atau
-Baca: KONVERSI-FULL-LARAVEL.md → Section "Panduan Implementasi"
-```
+### Backend Development
+📖 Baca:
+1. **[README.md](./README.md)** - Project overview & quick start
+2. **[FIX-SUMMARY.md](./FIX-SUMMARY.md)** - Technical details perbaikan
 
-**Template Tersedia Untuk:**
-- Pengumuman
-- Agenda
-- Layanan
-- Profil
-- PPID
-- Download
-- Kontak
-- Laman (dynamic)
-
-**Pattern:**
-1. Copy view dari `berita/index.blade.php`
-2. Sesuaikan dengan data model
-3. Test di browser
-4. ✅ Done!
+### Frontend Development
+📖 Baca:
+1. **[sanggau-frontend/README.md](./sanggau-frontend/README.md)** - Frontend overview
+2. **[sanggau-frontend/DEPLOYMENT-UPDATE.md](./sanggau-frontend/DEPLOYMENT-UPDATE.md)** - Update details
 
 ---
 
-### 3️⃣ **Troubleshooting**
+## 📋 DAFTAR LENGKAP DOKUMENTASI
 
-```
-Baca: SETUP-COMPLETE.md → Section "Known Issues"
-atau
-Baca: KONVERSI-FULL-LARAVEL.md → Section "Troubleshooting"
-```
+### Backend Documentation
 
-**Common Issues:**
-- Images tidak muncul → `php artisan storage:link`
-- CSS tidak update → `npm run dev` + hard refresh
-- Error 500 → `php artisan optimize:clear`
-- Menu kosong → Check database `menus` table
+| File | Deskripsi | Untuk Siapa |
+|------|-----------|-------------|
+| **[README.md](./README.md)** | Project overview, struktur, API docs | Developer |
+| **[FINAL-SUMMARY.md](./FINAL-SUMMARY.md)** | Ringkasan perbaikan & cara deploy | Semua |
+| **[UPLOAD-MANUAL-GUIDE.md](./UPLOAD-MANUAL-GUIDE.md)** | ⭐ Upload manual via File Manager | Deploy Engineer |
+| **[UPLOAD-QUICK-CHECKLIST.txt](./UPLOAD-QUICK-CHECKLIST.txt)** | ⭐ Quick checklist upload | Deploy Engineer |
+| **[DEPLOY-READY.md](./DEPLOY-READY.md)** | Panduan deploy lengkap step-by-step | Deploy Engineer |
+| **[PRE-DEPLOY-CHECKLIST.md](./PRE-DEPLOY-CHECKLIST.md)** | Checklist sebelum deploy | Deploy Engineer |
+| **[QUICK-REFERENCE.md](./QUICK-REFERENCE.md)** | Command quick reference | Deploy Engineer |
+| **[DEPLOYMENT-GUIDE.md](./DEPLOYMENT-GUIDE.md)** | Detail deployment ke cPanel | System Admin |
+| **[FIX-SUMMARY.md](./FIX-SUMMARY.md)** | Technical details perbaikan | Developer |
+| **[ADMIN-CMS-GUIDE.md](./ADMIN-CMS-GUIDE.md)** | Panduan CMS untuk admin | CMS User |
 
----
+### Frontend Documentation
 
-### 4️⃣ **Deployment Production**
-
-```
-Baca: README-LARAVEL-BLADE.md → Section "Deployment"
-atau
-Baca: KONVERSI-FULL-LARAVEL.md → Section "Deployment"
-```
-
-**Checklist:**
-- [ ] `npm run production`
-- [ ] `php artisan config:cache`
-- [ ] Set `APP_ENV=production`
-- [ ] Setup web server
-- [ ] Install SSL certificate
-- [ ] Test production URL
+| File | Deskripsi | Untuk Siapa |
+|------|-----------|-------------|
+| **[sanggau-frontend/README.md](./sanggau-frontend/README.md)** | Frontend overview & quick start | Developer |
+| **[sanggau-frontend/GIT-COMMIT-GUIDE.md](./sanggau-frontend/GIT-COMMIT-GUIDE.md)** | Git commands untuk deploy | Deploy Engineer |
+| **[sanggau-frontend/DEPLOYMENT-UPDATE.md](./sanggau-frontend/DEPLOYMENT-UPDATE.md)** | Frontend update details | Developer |
 
 ---
 
-## 📂 File Structure Overview
+## 🎯 WORKFLOW CEPAT
+
+### Saya Mau Deploy Sekarang (Upload Manual)!
+1. ✅ Baca: [PRE-DEPLOY-CHECKLIST.md](./PRE-DEPLOY-CHECKLIST.md)
+2. ✅ Print: [UPLOAD-QUICK-CHECKLIST.txt](./UPLOAD-QUICK-CHECKLIST.txt)
+3. ✅ Ikuti: [UPLOAD-MANUAL-GUIDE.md](./UPLOAD-MANUAL-GUIDE.md)
+4. ✅ Command: [QUICK-REFERENCE.md](./QUICK-REFERENCE.md)
+
+### Ada Error Setelah Deploy
+1. ✅ Cek: [DEPLOY-READY.md](./DEPLOY-READY.md) - Section Troubleshooting
+2. ✅ Atau: [QUICK-REFERENCE.md](./QUICK-REFERENCE.md) - Section Troubleshooting
+
+### Saya Developer Baru
+1. ✅ Baca: [README.md](./README.md) - Backend
+2. ✅ Baca: [sanggau-frontend/README.md](./sanggau-frontend/README.md) - Frontend
+3. ✅ Baca: [FIX-SUMMARY.md](./FIX-SUMMARY.md) - Apa yang sudah diperbaiki
+
+### Saya CMS Admin/User
+1. ✅ Baca: [ADMIN-CMS-GUIDE.md](./ADMIN-CMS-GUIDE.md)
+
+---
+
+## 🔗 QUICK LINKS
+
+### Deployment
+- [Pre-Deploy Checklist](./PRE-DEPLOY-CHECKLIST.md)
+- [Deploy Guide Lengkap](./DEPLOY-READY.md)
+- [Quick Reference Commands](./QUICK-REFERENCE.md)
+
+### Development
+- [Backend README](./README.md)
+- [Frontend README](./sanggau-frontend/README.md)
+- [Fix Summary](./FIX-SUMMARY.md)
+
+### Troubleshooting
+- [Deploy Ready - Troubleshooting](./DEPLOY-READY.md#troubleshooting)
+- [Deployment Guide - Troubleshooting](./DEPLOYMENT-GUIDE.md#troubleshooting)
+- [Quick Reference - Quick Fix](./QUICK-REFERENCE.md#troubleshooting-quick-fix)
+
+---
+
+## 📞 SUPPORT
+
+Tidak menemukan jawaban?
+
+1. **Check semua troubleshooting sections** di dokumen
+2. **Check Laravel logs**: `storage/logs/laravel.log`
+3. **Check Vercel logs**: Vercel Dashboard → Deployments → Logs
+4. **Contact:** Developer team
+
+---
+
+## ✅ QUICK CHECKLIST
+
+Sudah baca dokumentasi yang tepat?
+
+- [ ] Sudah tahu mau deploy backend atau frontend?
+- [ ] Sudah baca PRE-DEPLOY-CHECKLIST?
+- [ ] Sudah siapkan credentials (SSH, database, etc)?
+- [ ] Sudah backup database?
+- [ ] Sudah baca DEPLOY-READY step-by-step?
+- [ ] Sudah simpan QUICK-REFERENCE untuk command?
+
+**Jika semua ✅, silakan lanjut deploy!**
+
+---
+
+## 🎓 LEARNING PATH
+
+### Untuk Developer Baru:
+
+**Week 1: Understanding**
+- Day 1-2: Baca [README.md](./README.md) backend
+- Day 3-4: Baca [sanggau-frontend/README.md](./sanggau-frontend/README.md)
+- Day 5: Baca [FIX-SUMMARY.md](./FIX-SUMMARY.md)
+
+**Week 2: Hands-on**
+- Day 1-2: Setup local development
+- Day 3-4: Test features locally
+- Day 5: Baca [DEPLOY-READY.md](./DEPLOY-READY.md)
+
+**Week 3: Deployment**
+- Day 1: Baca [PRE-DEPLOY-CHECKLIST.md](./PRE-DEPLOY-CHECKLIST.md)
+- Day 2: Deploy to staging (if available)
+- Day 3-4: Test staging thoroughly
+- Day 5: Deploy to production
+
+---
+
+## 🗂️ FILE TREE
 
 ```
 sanggau-backend/
-│
-├── 📄 SETUP-COMPLETE.md       ← Status terkini & testing
-├── 📄 QUICK-START.md          ← Panduan cepat 5 langkah
-├── 📄 KONVERSI-FULL-LARAVEL.md ← Panduan lengkap implementasi
-├── 📄 README-LARAVEL-BLADE.md ← Dokumentasi project utama
-├── 📄 SUMMARY.md              ← Rangkuman hasil kerja
-└── 📄 DOCS-INDEX.md           ← File ini
-│
-├── resources/views/           ← Blade templates
-│   ├── layouts/
-│   │   ├── app.blade.php      ✅ Master layout
-│   │   ├── navbar.blade.php   ✅ Navigation
-│   │   └── footer.blade.php   ✅ Footer
-│   └── web/
-│       ├── home.blade.php     ✅ Homepage
-│       ├── berita/            ✅ Berita pages
-│       └── galeri/            ✅ Galeri page
-│
-├── public/
-│   ├── css/app.css            ✅ Compiled CSS
-│   ├── js/app.js              ✅ Compiled JS (134 KB)
-│   └── images/
-│       └── logo-sanggau.png   ✅ Logo
-│
-└── app/Http/Controllers/Web/  ✅ Controllers (semua sudah ada)
+├── 📄 README.md                      ← Start here (Project overview)
+├── 📄 DOCS-INDEX.md                  ← You are here
+├── 📄 FINAL-SUMMARY.md               ← Ringkasan perbaikan
+├── 📄 DEPLOY-READY.md                ← Deploy guide lengkap ⭐
+├── 📄 PRE-DEPLOY-CHECKLIST.md        ← Checklist sebelum deploy
+├── 📄 QUICK-REFERENCE.md             ← Command reference
+├── 📄 DEPLOYMENT-GUIDE.md            ← Detail deployment
+├── 📄 FIX-SUMMARY.md                 ← Technical details
+├── 📄 ADMIN-CMS-GUIDE.md             ← CMS user guide
+├── 📄 .env.production                ← Production template
+├── 📁 sanggau-frontend/
+│   ├── 📄 README.md                  ← Frontend overview
+│   ├── 📄 GIT-COMMIT-GUIDE.md        ← Git commands ⭐
+│   └── 📄 DEPLOYMENT-UPDATE.md       ← Frontend details
+└── 📁 app/, routes/, config/, etc.
 ```
 
----
-
-## 🎯 Decision Tree - Dokumentasi Mana yang Harus Dibaca?
-
-```
-┌─────────────────────────────────┐
-│ Apa yang ingin Anda lakukan?   │
-└─────────────────────────────────┘
-              │
-    ┌─────────┴──────────┐
-    ▼                    ▼
-┌─────────┐        ┌──────────┐
-│ Setup   │        │ Develop  │
-│ Pertama │        │ Lanjutan │
-└─────────┘        └──────────┘
-    │                    │
-    ▼                    ▼
-    │              ┌─────────────┐
-    │              │ Buat Halaman│───► QUICK-START.md
-    │              │ Baru        │     atau
-    │              └─────────────┘     KONVERSI-FULL-LARAVEL.md
-    │                    │
-    │              ┌─────────────┐
-    │              │ Deploy      │───► README-LARAVEL-BLADE.md
-    │              │ Production  │
-    │              └─────────────┘
-    │                    │
-    ▼              ┌─────────────┐
-SETUP-COMPLETE.md  │ Trouble-    │───► SETUP-COMPLETE.md
-    +              │ shooting    │     atau
-QUICK-START.md     └─────────────┘     KONVERSI-FULL-LARAVEL.md
-                         │
-                   ┌─────────────┐
-                   │ Lihat       │───► SUMMARY.md
-                   │ Rangkuman   │
-                   └─────────────┘
-```
+⭐ = Must read untuk deploy
 
 ---
 
-## 🔍 Quick Search - Topik Spesifik
+## 🎯 TIPS
 
-### **Installation & Setup**
-- Fresh install → **README-LARAVEL-BLADE.md** § Installation
-- Sudah install, mau test → **SETUP-COMPLETE.md** § Testing
-- Quick setup → **QUICK-START.md** § Langkah 1-7
-
-### **Development**
-- Buat halaman baru → **QUICK-START.md** § Langkah 7
-- Design guidelines → **KONVERSI-FULL-LARAVEL.md** § Design System
-- Template halaman → **KONVERSI-FULL-LARAVEL.md** § Template Dasar
-
-### **Deployment**
-- Deploy ke production → **README-LARAVEL-BLADE.md** § Deployment
-- Optimize performance → **KONVERSI-FULL-LARAVEL.md** § Optimization
-- Web server config → **README-LARAVEL-BLADE.md** § Nginx/Apache
-
-### **Troubleshooting**
-- Error handling → **SETUP-COMPLETE.md** § Known Issues
-- Debug guide → **KONVERSI-FULL-LARAVEL.md** § Troubleshooting
-- Performance issues → **README-LARAVEL-BLADE.md** § Monitoring
-
-### **Reference**
-- File structure → **SUMMARY.md** § File Structure
-- Feature list → **SUMMARY.md** § Features
-- Statistics → **SUMMARY.md** § Statistics
-- Commands → **SETUP-COMPLETE.md** § Commands
+1. **Bookmark halaman ini** untuk referensi cepat
+2. **Print PRE-DEPLOY-CHECKLIST** sebelum deploy
+3. **Save QUICK-REFERENCE** di desktop untuk akses cepat
+4. **Backup database** sebelum deploy apapun
+5. **Test di staging** dulu sebelum production (jika ada)
 
 ---
 
-## 📊 Completion Progress
-
-```
-Overall Progress: ████████████░░░░░░░░ 80%
-
-✅ Completed:
-├── Setup & Dependencies      100% ████████████
-├── Layout System             100% ████████████
-├── Homepage                  100% ████████████
-├── Berita Pages              100% ████████████
-├── Galeri Page               100% ████████████
-└── Documentation             100% ████████████
-
-🔲 Pending:
-└── 8 Halaman Tersisa          20% ██░░░░░░░░░░
-    (Template & controllers sudah siap)
-```
-
----
-
-## 🎓 Learning Path
-
-### **Level 1: Beginner** (Hari 1)
-1. Baca **SETUP-COMPLETE.md**
-2. Test aplikasi (4 halaman)
-3. Pahami struktur file
-
-### **Level 2: Intermediate** (Hari 2-3)
-1. Baca **QUICK-START.md**
-2. Buat 1-2 halaman baru
-3. Customize design
-
-### **Level 3: Advanced** (Hari 4-5)
-1. Baca **KONVERSI-FULL-LARAVEL.md**
-2. Lengkapi semua halaman
-3. Optimize performance
-
-### **Level 4: Production** (Hari 6-7)
-1. Baca **README-LARAVEL-BLADE.md**
-2. Deploy ke server
-3. Setup monitoring
-
----
-
-## 💡 Tips Membaca Dokumentasi
-
-### ✅ **DO:**
-- Baca sesuai kebutuhan (gunakan decision tree)
-- Bookmark file yang sering dipakai
-- Test sambil baca (learning by doing)
-- Catat masalah yang ditemukan
-
-### ❌ **DON'T:**
-- Baca semua file sekaligus (overwhelming)
-- Skip testing (langsung production)
-- Ignore troubleshooting section
-- Lupa backup sebelum deploy
-
----
-
-## 🚀 Action Items - Next 24 Hours
-
-### **Immediate (Sekarang)**
-- [ ] ✅ Check server running: http://127.0.0.1:8000
-- [ ] ✅ Test homepage
-- [ ] ✅ Test berita page
-- [ ] ✅ Test galeri page
-- [ ] ✅ Test responsive (mobile view)
-
-### **Today (Hari ini)**
-- [ ] Buat 1 halaman baru (contoh: Pengumuman)
-- [ ] Populate data di database
-- [ ] Test dark mode
-- [ ] Check semua link navbar
-
-### **Tomorrow (Besok)**
-- [ ] Buat 3-4 halaman tersisa
-- [ ] Upload content (images, text)
-- [ ] Performance testing
-- [ ] Fix bugs (jika ada)
-
-### **This Week (Minggu ini)**
-- [ ] Lengkapi semua halaman
-- [ ] Content finalization
-- [ ] Compile production assets
-- [ ] Prepare deployment
-
----
-
-## 📞 Support & Resources
-
-### Internal Documentation
-- **SETUP-COMPLETE.md** - Current status
-- **QUICK-START.md** - Quick guide
-- **KONVERSI-FULL-LARAVEL.md** - Full guide
-- **README-LARAVEL-BLADE.md** - Project docs
-- **SUMMARY.md** - Summary
-
-### External Resources
-- Laravel Docs: https://laravel.com/docs/8.x
-- Blade Docs: https://laravel.com/docs/8.x/blade
-- Laravel Mix: https://laravel-mix.com
-- CSS Grid: https://css-tricks.com/snippets/css/complete-guide-grid/
-
-### Community
-- Laravel Indonesia: https://t.me/laravelindonesia
-- Stack Overflow: https://stackoverflow.com/questions/tagged/laravel
-
----
-
-## ✅ Final Checklist
-
-**Sebelum Mulai Development:**
-- [x] Baca SETUP-COMPLETE.md
-- [x] Server running: http://127.0.0.1:8000
-- [x] Assets compiled
-- [x] Logo copied
-- [ ] Test 4 halaman yang ada
-- [ ] Pahami struktur file
-
-**Sebelum Deploy Production:**
-- [ ] Semua halaman lengkap
-- [ ] Content populated
-- [ ] `npm run production`
-- [ ] Cache enabled
-- [ ] `.env` production configured
-- [ ] SSL certificate installed
-- [ ] Backup database
-- [ ] Server configured
-
----
-
-## 🎉 Kesimpulan
-
-**Anda sekarang punya dokumentasi lengkap untuk:**
-- ✅ Setup & installation
-- ✅ Development workflow
-- ✅ Troubleshooting
-- ✅ Deployment
-- ✅ Maintenance
-
-**Mulai dari:**
-1. **SETUP-COMPLETE.md** (status terkini)
-2. **QUICK-START.md** (langkah cepat)
-3. Pilih file lain sesuai kebutuhan
-
-**Server running di:** http://127.0.0.1:8000
-
----
-
-**Happy Coding! 🚀**
-
-**Built with ❤️ for Kabupaten Sanggau**
+**Happy Coding & Deploying! 🚀**

@@ -1,0 +1,176 @@
+═══════════════════════════════════════════════════════════════
+    📤 UPLOAD MANUAL - QUICK CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+📋 FILE YANG HARUS DI-UPLOAD & REPLACE:
+
+┌─────────────────────────────────────────────────────────────┐
+│ FILE                          │ ACTION                       │
+├───────────────────────────────┼──────────────────────────────┤
+│ app/Models/Berita.php         │ Backup → Delete → Upload     │
+│ app/Models/Banner.php         │ Backup → Delete → Upload     │
+│ app/Models/Galeri.php         │ Backup → Delete → Upload     │
+│ app/Helpers/helpers.php       │ Buat folder → Upload (NEW!)  │
+│ routes/api.php                │ Backup → Delete → Upload     │
+│ composer.json                 │ Backup → Delete → Upload     │
+│ .env                          │ Edit APP_URL & DB            │
+└───────────────────────────────┴──────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+    🎯 LANGKAH UPLOAD (File Manager cPanel)
+═══════════════════════════════════════════════════════════════
+
+1️⃣  LOGIN cPanel
+    → https://sanggau.go.id:2083/
+    → File Manager
+
+2️⃣  NAVIGASI ke public_html
+    → Cari folder: app/, routes/, composer.json
+
+3️⃣  UPLOAD app/Models/Berita.php
+    ✓ Klik app/ → Models/
+    ✓ Klik kanan Berita.php → Copy → Paste → Rename: Berita.php.backup
+    ✓ Delete Berita.php
+    ✓ Klik Upload → Select: C:\xampp\htdocs\sanggau-backend\app\Models\Berita.php
+    ✓ Upload → Go Back
+
+4️⃣  UPLOAD app/Models/Banner.php
+    ✓ Copy Banner.php → Banner.php.backup
+    ✓ Delete Banner.php
+    ✓ Upload: C:\xampp\htdocs\sanggau-backend\app\Models\Banner.php
+
+5️⃣  UPLOAD app/Models/Galeri.php
+    ✓ Copy Galeri.php → Galeri.php.backup
+    ✓ Delete Galeri.php
+    ✓ Upload: C:\xampp\htdocs\sanggau-backend\app\Models\Galeri.php
+
+6️⃣  BUAT FOLDER app/Helpers/ (BARU!)
+    ✓ Di folder app/, klik "+ Folder"
+    ✓ Ketik: Helpers
+    ✓ Create
+    ✓ Masuk ke Helpers/
+    ✓ Upload: C:\xampp\htdocs\sanggau-backend\app\Helpers\helpers.php
+
+7️⃣  UPLOAD routes/api.php
+    ✓ Back ke root, klik routes/
+    ✓ Copy api.php → api.php.backup
+    ✓ Delete api.php
+    ✓ Upload: C:\xampp\htdocs\sanggau-backend\routes\api.php
+
+8️⃣  UPLOAD composer.json
+    ✓ Back ke root (public_html)
+    ✓ Copy composer.json → composer.json.backup
+    ✓ Delete composer.json
+    ✓ Upload: C:\xampp\htdocs\sanggau-backend\composer.json
+
+9️⃣  UPDATE .env
+    ✓ Klik kanan .env → Edit
+    ✓ Update:
+        APP_ENV=production
+        APP_DEBUG=false
+        APP_URL=https://diskominfo.sanggau.go.id
+        DB_HOST=localhost
+        DB_DATABASE=your_database_name
+        DB_USERNAME=your_db_username
+        DB_PASSWORD=your_db_password
+    ✓ Save Changes
+
+═══════════════════════════════════════════════════════════════
+    🔧 COMMANDS (Terminal cPanel) - WAJIB!
+═══════════════════════════════════════════════════════════════
+
+📌 Buka Terminal di cPanel, lalu:
+
+cd public_html
+# atau: cd domains/diskominfo.sanggau.go.id/public_html
+
+composer install --no-dev --optimize-autoloader
+# ⏳ Tunggu 1-3 menit
+
+composer dump-autoload -o
+# ⏳ Tunggu sebentar
+
+php artisan config:clear
+
+php artisan cache:clear
+
+chmod -R 777 public/uploads
+
+═══════════════════════════════════════════════════════════════
+    🧪 TESTING
+═══════════════════════════════════════════════════════════════
+
+Di Terminal:
+curl https://diskominfo.sanggau.go.id/api/banner
+
+Di Browser:
+https://diskominfo.sanggau.go.id/api/banner
+
+✅ EXPECTED OUTPUT:
+{
+  "id": 1,
+  "judul": "Banner Test",
+  "gambar": "https://diskominfo.sanggau.go.id/uploads/banner/xxx.jpg"
+           ↑↑↑↑↑↑ HARUS FULL URL
+}
+
+❌ WRONG OUTPUT:
+{
+  "gambar": "/uploads/banner/xxx.jpg"  ← Masih relative path
+}
+
+═══════════════════════════════════════════════════════════════
+    ⚠️  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ Upload Error
+   → File size terlalu besar? Compress jadi .zip → Upload → Extract
+
+❌ File Tidak Replace
+   → Pastikan DELETE file lama sebelum upload baru
+
+❌ Composer Error
+   → Try: php /usr/local/bin/composer install --no-dev
+
+❌ Permission Error
+   → chmod -R 755 storage bootstrap/cache
+   → chmod -R 777 storage/logs public/uploads
+
+❌ API Masih Return Relative Path
+   → php artisan config:clear
+   → php artisan cache:clear
+   → composer dump-autoload -o
+
+═══════════════════════════════════════════════════════════════
+    ✅ FINAL CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+Upload Files:
+□ app/Models/Berita.php
+□ app/Models/Banner.php
+□ app/Models/Galeri.php
+□ app/Helpers/helpers.php (NEW FOLDER!)
+□ routes/api.php
+□ composer.json
+□ .env (edited)
+
+Run Commands:
+□ composer install
+□ composer dump-autoload
+□ php artisan config:clear
+□ php artisan cache:clear
+□ chmod uploads
+
+Testing:
+□ API return full URL ✅
+□ Upload gambar di CMS
+□ Gambar muncul di frontend
+
+═══════════════════════════════════════════════════════════════
+
+🎉 JIKA SEMUA ✅ → BACKEND SUKSES!
+
+Next: Deploy frontend via Git
+→ Lihat: sanggau-frontend/GIT-COMMIT-GUIDE.md
+
+═══════════════════════════════════════════════════════════════

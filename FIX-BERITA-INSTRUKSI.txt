@@ -1,0 +1,117 @@
+====================================================================
+🔧 PERBAIKAN MASALAH BERITA "b64:YXNkc2Fk"
+====================================================================
+
+MASALAH:
+❌ Judul berita menampilkan: "b64:YXNkc2Fk"
+❌ Konten berita ter-encode base64
+❌ CMS menampilkan "0 berita tersedia"
+
+ROOT CAUSE:
+Middleware DecodeBase64Input dinonaktifkan, sehingga data yang
+dikirim frontend (dengan prefix b64:) tidak di-decode dan tersimpan
+dalam bentuk encoded di database.
+
+SOLUSI:
+✅ Perbaiki middleware DecodeBase64Input agar support file upload
+✅ Aktifkan kembali middleware di Kernel.php
+✅ Hapus berita test yang ter-encode
+✅ Buat berita baru (akan otomatis di-decode)
+
+====================================================================
+📦 FILE YANG HARUS DI-UPLOAD (3 FILES)
+====================================================================
+
+1. app/Http/Middleware/DecodeBase64Input.php
+   → Upload ke: /home/diskominfo/public_html/app/Http/Middleware/
+   → Status: SUDAH DIPERBAIKI ✅
+   → Yang diperbaiki: Exclude file upload dari decode process
+
+2. app/Http/Kernel.php
+   → Upload ke: /home/diskominfo/public_html/app/Http/
+   → Status: SUDAH DIPERBAIKI ✅
+   → Yang diperbaiki: DecodeBase64Input ENABLED untuk API routes
+
+3. test-berita-api.php
+   → Upload ke: /home/diskominfo/public_html/
+   → Status: FILE BARU ✅
+   → Fungsi: Diagnostic tool untuk cek berita API
+
+====================================================================
+🚀 LANGKAH-LANGKAH (HARUS URUT!)
+====================================================================
+
+STEP 1: Upload 3 File
+   ✅ DecodeBase64Input.php ke app/Http/Middleware/
+   ✅ Kernel.php ke app/Http/
+   ✅ test-berita-api.php ke root
+
+STEP 2: Clear Cache
+   → Buka: https://api.diskominfo.sanggau.go.id/clear-cache.php
+   → Harus muncul semua ✅
+
+STEP 3: Test Berita API
+   → Buka: https://api.diskominfo.sanggau.go.id/test-berita-api.php
+   → Lihat hasilnya:
+     - Berapa berita di database?
+     - Apakah ada data ter-encode (b64:)?
+
+STEP 4: Hapus Berita Test yang Ter-encode
+   → Buka CMS Admin: Kelola Berita
+   → Jika ada berita dengan judul "b64:..." → HAPUS
+   → Atau hapus langsung dari database
+
+STEP 5: Buat Berita Baru
+   → Klik "+ Tambah Berita"
+   → Isi form normal
+   → Klik "💾 Simpan"
+   → SEKARANG HARUS BERHASIL TANPA b64: PREFIX! ✅
+
+STEP 6: Verifikasi
+   → Cek di CMS: Berita harus muncul di list
+   → Cek di Homepage: Berita harus tampil dengan judul normal
+   → Klik detail berita: Konten harus tampil normal (bukan b64:...)
+
+====================================================================
+❓ KENAPA MIDDLEWARE DecodeBase64Input DIPERLUKAN?
+====================================================================
+
+Frontend Next.js mengirim data dengan format:
+{
+  "judul": "b64:VGVzdCBCZXJpdGE=",    ← Ini base64 encoded!
+  "konten": "b64:SW5pIGtvbnRlbg==",   ← Ini juga!
+  "kategori": "Pemerintahan"          ← Ini normal
+}
+
+Middleware DecodeBase64Input akan:
+1. Cek setiap string yang ada prefix "b64:"
+2. Decode base64-nya
+3. Replace dengan string asli
+4. SKIP file upload (gambar, dll)
+
+Hasil setelah middleware:
+{
+  "judul": "Test Berita",             ← ✅ Decoded!
+  "konten": "Ini konten",             ← ✅ Decoded!
+  "kategori": "Pemerintahan"          ← Tetap sama
+}
+
+====================================================================
+🐛 TROUBLESHOOTING
+====================================================================
+
+Q: Setelah upload masih error 500?
+A: Cek show-latest-log.php untuk lihat error detailnya
+
+Q: Middleware tidak jalan?
+A: Pastikan clear-cache.php sudah dijalankan
+
+Q: Berita masih b64: setelah perbaikan?
+A: Itu berita LAMA yang ter-encode di database.
+   Hapus dan buat baru, atau update manual di database.
+
+Q: CMS masih "0 berita tersedia"?
+A: Coba hard refresh browser (Ctrl+Shift+R)
+   Atau cek test-berita-api.php untuk lihat API response
+
+====================================================================

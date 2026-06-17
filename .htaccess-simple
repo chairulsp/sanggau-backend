@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Route /api/* to simple API (bypass Laravel)
+    RewriteRule ^api/banner$ api-simple.php?path=banner [L,QSA]
+    RewriteRule ^api/berita$ api-simple.php?path=berita [L,QSA]
+    RewriteRule ^api/settings$ api-simple.php?path=settings [L,QSA]
+    
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    
+    # Send other requests to Laravel
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

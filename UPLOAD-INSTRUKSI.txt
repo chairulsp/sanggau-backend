@@ -1,0 +1,98 @@
+====================================================================
+📦 FILE YANG HARUS DI-UPLOAD KE CPANEL
+====================================================================
+
+PENTING: BeritaController.php sudah diperbaiki dengan:
+✅ Validasi yang lebih fleksibel (tidak strict)
+✅ Normalisasi status (terima: published, draft, true, false, 1, 0)
+✅ Normalisasi published_at (parse berbagai format tanggal)
+✅ Logging untuk debug (akan muncul di Laravel log)
+✅ Error handling yang lebih baik
+
+====================================================================
+1. FILE UTAMA (WAJIB UPLOAD)
+====================================================================
+
+📁 app/Http/Controllers/Api/Admin/BeritaController.php
+   → Upload ke: /home/diskominfo/public_html/app/Http/Controllers/Api/Admin/
+   → Status: SUDAH DIPERBAIKI ✅
+
+📁 app/Http/Kernel.php  
+   → Upload ke: /home/diskominfo/public_html/app/Http/
+   → Status: SUDAH DIPERBAIKI ✅
+
+====================================================================
+2. FILE DIAGNOSTIC (OPSIONAL - untuk troubleshooting)
+====================================================================
+
+📁 check-middleware.php
+   → Upload ke: /home/diskominfo/public_html/
+   → URL: https://api.diskominfo.sanggau.go.id/check-middleware.php
+
+📁 test-create-berita.php
+   → Upload ke: /home/diskominfo/public_html/
+   → URL: https://api.diskominfo.sanggau.go.id/test-create-berita.php
+
+📁 show-latest-log.php
+   → Upload ke: /home/diskominfo/public_html/
+   → URL: https://api.diskominfo.sanggau.go.id/show-latest-log.php
+
+====================================================================
+3. LANGKAH-LANGKAH SETELAH UPLOAD
+====================================================================
+
+STEP 1: Clear Cache
+   → https://api.diskominfo.sanggau.go.id/clear-cache.php
+
+STEP 2: Cek Middleware (opsional)
+   → https://api.diskominfo.sanggau.go.id/check-middleware.php
+   → Harus semua ✅
+
+STEP 3: Test Buat Berita
+   → Buka admin panel
+   → Klik "Tambah Berita"
+   → Isi form dan klik "Simpan"
+   → SEHARUSNYA BERHASIL! ✅
+
+STEP 4: Jika masih error, cek log
+   → https://api.diskominfo.sanggau.go.id/show-latest-log.php
+   → Cari "Berita Store Request" untuk lihat data yang diterima
+   → Screenshot dan kirim ke saya
+
+====================================================================
+4. APA YANG SUDAH DIPERBAIKI
+====================================================================
+
+MASALAH LAMA:
+❌ status: The selected status is invalid.
+❌ published_at: The published at is not a valid date.
+
+SOLUSI:
+✅ Validasi status sekarang fleksibel - terima apapun
+✅ Validasi published_at sekarang fleksibel - terima apapun
+✅ Normalisasi otomatis untuk berbagai format:
+   - status: "published", "draft", true, false, 1, 0
+   - published_at: ISO8601, MySQL datetime, atau kosong
+✅ Logging untuk debug jika masih ada masalah
+
+====================================================================
+5. YANG DITERIMA BACKEND SEKARANG
+====================================================================
+
+STATUS field menerima:
+✅ "published" → aktif = true
+✅ "draft" → aktif = false  
+✅ true → aktif = true
+✅ false → aktif = false
+✅ 1 → aktif = true
+✅ 0 → aktif = false
+✅ null/kosong → aktif = false (default draft)
+
+PUBLISHED_AT field menerima:
+✅ "2026-06-12T10:30" (dari datetime-local input)
+✅ "2026-06-12 10:30:00" (MySQL format)
+✅ "2026-06-12" (date only)
+✅ null/kosong → auto set ke now() jika published, null jika draft
+✅ Format invalid → fallback ke now() atau null
+
+====================================================================
