@@ -26,7 +26,7 @@ class PublicController extends Controller
 {
     public function berita(Request $request)
     {
-        $q = Berita::where('aktif', true)->orderBy('published_at', 'desc');
+        $q = Berita::orderBy('published_at', 'desc');
         if ($request->kategori) {
             $q->where('kategori', $request->kategori);
         }
@@ -39,7 +39,6 @@ class PublicController extends Controller
     public function detailBerita($slug)
     {
         $berita = Berita::with(['user', 'editor'])
-            ->where('aktif', true)
             ->where(function ($q) use ($slug) {
                 $q->where('slug', $slug)->orWhere('id', $slug);
             })
@@ -49,7 +48,6 @@ class PublicController extends Controller
         $berita->increment('views');
 
         $related = Berita::where('id', '!=', $berita->id)
-            ->where('aktif', true)
             ->where('kategori', $berita->kategori)
             ->orderBy('published_at', 'desc')
             ->limit(3)
