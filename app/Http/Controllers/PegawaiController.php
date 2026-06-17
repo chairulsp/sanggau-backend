@@ -87,7 +87,7 @@ class PegawaiController extends Controller
         if ($request->hasFile('foto')) {
             $file     = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $dir      = '/home/diskominfo/public_html/uploads/pegawai';
+            $dir      = public_path('uploads/pegawai');
             if (!is_dir($dir)) mkdir($dir, 0755, true);
             $file->move($dir, $filename);
             $data['foto'] = '/uploads/pegawai/' . $filename;
@@ -136,14 +136,13 @@ class PegawaiController extends Controller
         if ($data['tipe_jabatan'] === 'pimpinan') $data['bidang'] = null;
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama
             if ($pegawai->foto && str_contains($pegawai->foto, '/uploads/pegawai/')) {
-                $old = '/home/diskominfo/public_html' . $pegawai->foto;
+                $old = public_path(ltrim($pegawai->foto, '/'));
                 if (file_exists($old)) unlink($old);
             }
             $file     = $request->file('foto');
             $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file->getClientOriginalName());
-            $dir      = '/home/diskominfo/public_html/uploads/pegawai';
+            $dir      = public_path('uploads/pegawai');
             if (!is_dir($dir)) mkdir($dir, 0755, true);
             $file->move($dir, $filename);
             $data['foto'] = '/uploads/pegawai/' . $filename;
@@ -162,7 +161,7 @@ class PegawaiController extends Controller
         if (!$pegawai) return response()->json(['success' => false, 'message' => 'Pegawai tidak ditemukan'], 404);
 
         if ($pegawai->foto && str_contains($pegawai->foto, '/uploads/pegawai/')) {
-            $path = '/home/diskominfo/public_html' . $pegawai->foto;
+            $path = public_path(ltrim($pegawai->foto, '/'));
             if (file_exists($path)) unlink($path);
         }
 
