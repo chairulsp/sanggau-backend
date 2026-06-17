@@ -16,33 +16,58 @@ echo '<pre style="font-family:monospace;font-size:12px;background:#111;color:#0f
 
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
+    echo "✓ Koneksi database berhasil\n\n";
 
-    $total   = $pdo->query("SELECT COUNT(*) FROM berita")->fetchColumn();
-    $aktif   = $pdo->query("SELECT COUNT(*) FROM berita WHERE aktif = 1")->fetchColumn();
-    $nonaktif = $pdo->query("SELECT COUNT(*) FROM berita WHERE aktif = 0 OR aktif IS NULL")->fetchColumn();
-
-    echo "Total berita : $total\n";
-    echo "Aktif (1)    : $aktif\n";
-    echo "Draft/Non (0): $nonaktif\n\n";
-
-    echo "=== 5 BERITA TERBARU (semua status) ===\n";
-    $rows = $pdo->query("SELECT id, judul, aktif, published_at FROM berita ORDER BY created_at DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $r) {
-        echo "[{$r['id']}] aktif={$r['aktif']} | published_at={$r['published_at']} | {$r['judul']}\n";
+    // Tampilkan semua tabel yang ada
+    echo "=== TABEL YANG ADA DI DATABASE ===\n";
+    $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($tables as $t) {
+        $count = $pdo->query("SELECT COUNT(*) FROM `$t`")->fetchColumn();
+        echo "  $t ($count rows)\n";
     }
 
-    // Fix: aktifkan semua berita yang published_at tidak null
-    if (isset($_GET['fix']) && $_GET['fix'] === '1') {
-        echo "\n=== FIX: Aktifkan semua berita yang published_at tidak null ===\n";
-        $updated = $pdo->exec("UPDATE berita SET aktif = 1 WHERE published_at IS NOT NULL AND aktif = 0");
-        echo "Diupdate: $updated berita\n";
+    // Jalankan migration berita jika tabel tidak ada
+    if (isset($_GET['migrate']) && $_GET['migrate'] === '1') {
+        echo "\n=== MEMBUAT TABEL berita ===\n";
+        $sql = "CREATE TABLE IF NOT EXISTS `berita` (
+            `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            `judul` varchar(255) NOT NULL,
+            `slug` varchar(255) NOT NULL,
+            `ringkasan` text DEFAULT NULL,
+            `konten` longtext DEFAULT NULL,
+            `gambar` varchar(255) DEFAULT NULL,
+            `penulis` varchar(255) DEFAULT NULL,
+            `kategori` varchar(100) DEFAULT NULL,
+            `tags` varchar(255) DEFAULT NULL,
+            `featured` tinyint(1) NOT NULL DEFAULT 0,
+            `aktif` tinyint(1) NOT NULL DEFAULT 0,
+            `views` int(11) NOT NULL DEFAULT 0,
+            `published_at` timestamp NULL DEFAULT NULL,
+            `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+            `editor_id` bigint(20) UNSIGNED DEFAULT NULL,
+            `created_at` timestamp NULL DEFAULT NULL,
+            `updated_at` timestamp NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `berita_slug_unique` (`slug`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
-        // Juga aktifkan yang published_at null tapi ada kontennya
-        $updated2 = $pdo->exec("UPDATE berita SET aktif = 1, published_at = created_at WHERE published_at IS NULL AND aktif = 0 AND judul != ''");
-        echo "Diupdate (tanpa published_at): $updated2 berita\n";
+        $pdo->exec($sql);
+        echo "✓ Tabel berita berhasil dibuat!\n";
+
+        // Cek apakah ada data berita lama di tabel lain
+        echo "\n=== CEK DATA BERITA LAMA ===\n";
+        $altTables = ['news', 'artikel', 'posts', 'berita_old'];
+        foreach ($altTables as $alt) {
+            try {
+                $c = $pdo->query("SELECT COUNT(*) FROM `$alt`")->fetchColumn();
+                echo "  Ditemukan tabel '$alt' dengan $c rows\n";
+            } catch(Exception $e) {
+                // tabel tidak ada, skip
+            }
+        }
     } else {
-        echo "\nTambahkan ?fix=1 ke URL untuk mengaktifkan semua berita.\n";
-        echo "URL: https://api.diskominfo.sanggau.go.id/check-berita.php?key=diskominfo2024&fix=1\n";
+        echo "\nUntuk membuat tabel berita:\n";
+        echo "https://api.diskominfo.sanggau.go.id/check-berita.php?key=diskominfo2024&migrate=1\n";
     }
 
 } catch(Exception $e) {
