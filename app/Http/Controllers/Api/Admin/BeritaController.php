@@ -11,15 +11,22 @@ class BeritaController extends Controller
 {
     public function index(Request $request)
     {
-        // For admin list, show latest news.
-        // Writers can see all news but cannot edit others' news. We will return news along with user role info if needed,
-        // but simple listing is fine.
+        $user = $request->user();
         try {
-            return response()->json(Berita::with(['user', 'editor'])->latest()->get());
+            $q = Berita::with(['user', 'editor'])->latest();
+
+            // Penulis hanya bisa lihat beritanya sendiri
+            if ($user->role === 'penulis') {
+                $q->where('user_id', $user->id);
+            }
+
+            return response()->json($q->get());
         } catch (\Exception $e) {
-            // Fallback without relationships if there's an issue
-            \Log::warning('Failed to load berita with relationships', ['error' => $e->getMessage()]);
-            return response()->json(Berita::latest()->get());
+            $q = Berita::latest();
+            if ($user->role === 'penulis') {
+                $q->where('user_id', $user->id);
+            }
+            return response()->json($q->get());
         }
     }
 
