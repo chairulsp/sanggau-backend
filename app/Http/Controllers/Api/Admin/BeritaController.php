@@ -16,15 +16,28 @@ class BeritaController extends Controller
             $q = Berita::with(['user', 'editor'])->latest();
 
             // Penulis hanya bisa lihat beritanya sendiri
+            // Cek berdasarkan user_id ATAU nama penulis (untuk berita lama yang user_id null)
             if ($user->role === 'penulis') {
-                $q->where('user_id', $user->id);
+                $q->where(function($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                          ->orWhere(function($q2) use ($user) {
+                              $q2->whereNull('user_id')
+                                 ->where('penulis', $user->name);
+                          });
+                });
             }
 
             return response()->json($q->get());
         } catch (\Exception $e) {
             $q = Berita::latest();
             if ($user->role === 'penulis') {
-                $q->where('user_id', $user->id);
+                $q->where(function($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                          ->orWhere(function($q2) use ($user) {
+                              $q2->whereNull('user_id')
+                                 ->where('penulis', $user->name);
+                          });
+                });
             }
             return response()->json($q->get());
         }
